@@ -40,27 +40,28 @@ varSec = [f"{i:02d}" for i in range(60)]
 varMin = [f"{i:02d}" for i in range(60)]
 varH = [f"{i:02d}" for i in range(24)]
 
-frame1 = Frame(root)
-frame1.pack()
-myTimeLabel = Label(frame1, text="Enter the time (HH:MM:SS)", width=25, anchor="e")
-myTimeInputH = ttk.Combobox(frame1, values=varH, width=2, validate="key", validatecommand=(validate, "%P"))
+frame = Frame(root)
+frame.pack()
+myTimeInput = Frame(frame)
+myTimeInput.grid(row=0, column=1, padx=20, pady=10)
+
+myTimeLabel = Label(frame, text="Enter the time (HH:MM:SS)",width=25)
+myTimeInputH = ttk.Combobox(myTimeInput, values=varH, width=3, validate="key", validatecommand=(validate, "%P"))
 myTimeInputH.current(0)
-myTimeInputMin = ttk.Combobox(frame1, values=varMin, width=2, validate="key", validatecommand=(validate, "%P"))
+myTimeInputMin = ttk.Combobox(myTimeInput, values=varMin, width=3, validate="key", validatecommand=(validate, "%P"))
 myTimeInputMin.current(0)
-myTimeInputSec = ttk.Combobox(frame1, values=varSec, width=2, validate="key", validatecommand=(validate, "%P"))
+myTimeInputSec = ttk.Combobox(myTimeInput, values=varSec, width=3, validate="key", validatecommand=(validate, "%P"))
 myTimeInputSec.current(0)
 
-myTimeLabel.pack(side="left")
+myTimeLabel.grid(row=0, column=0)
 myTimeInputH.pack(side="left")
 myTimeInputMin.pack(side="left")
 myTimeInputSec.pack(side="left")
 
-frame2 = Frame(root)
-frame2.pack()
-taskLabel = Label(frame2, text="Enter task to do",width=25, anchor="e")
-taskInput = Entry(frame2)
-taskLabel.pack(side="left")
-taskInput.pack(side="left")
+taskLabel = Label(frame, text="Enter task to do",width=25)
+taskInput = Entry(frame)
+taskLabel.grid(row=1, column=0)
+taskInput.grid(row=1, column=1)
 
 # Label for countdown and task
 countdownLabel = Label(root, text="", font=(20))
