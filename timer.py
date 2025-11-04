@@ -21,7 +21,6 @@ def StartTimer():
     
     myTime = int(myTimeInputH.get())*3600 + int(myTimeInputMin.get())*60 + int(myTimeInputSec.get())
     task = taskInput.get().upper()
-
     
     if myTime == 0 and currentTime == 0:
         timesUpLabel.config(text="Timer must be greater than 0!")
@@ -69,7 +68,13 @@ def StopTimer():
     
 def ResetTimer():
     os.execv(sys.executable, ['python'] + sys.argv)
+    
+def EmptyBox(event):
+    event.widget.set("")
 
+def FillBox(event):
+    if event.widget.get() == "":
+        event.widget.set("00")
 
 varMinSec = [f"{i:02d}" for i in range(60)]
 varH = [f"{i:02d}" for i in range(24)]
@@ -86,6 +91,16 @@ myTimeInputMin = ttk.Combobox(myTimeInput, values=varMinSec, width=3, validate="
 myTimeInputMin.current(0)
 myTimeInputSec = ttk.Combobox(myTimeInput, values=varMinSec, width=3, validate="key", validatecommand=(validate, "%P"))
 myTimeInputSec.current(0)
+
+myTimeInputH.bind("key", EmptyBox)
+myTimeInputMin.bind("key", EmptyBox)
+myTimeInputSec.bind("key", EmptyBox)
+myTimeInputH.bind("<Button-1>", EmptyBox)
+myTimeInputMin.bind("<Button-1>", EmptyBox)
+myTimeInputSec.bind("<Button-1>", EmptyBox)
+myTimeInputH.bind("<FocusOut>", FillBox)
+myTimeInputMin.bind("<FocusOut>", FillBox)
+myTimeInputSec.bind("<FocusOut>", FillBox)
 
 myTimeLabel.grid(row=0, column=0)
 myTimeInputH.pack(side="left")
