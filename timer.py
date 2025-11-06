@@ -5,6 +5,7 @@ import json
 import winsound
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 stoped = False
 currentTime = 0
@@ -67,21 +68,26 @@ def StopTimer():
     
     
 def ResetTimer():
-    os.execv(sys.executable, ['python'] + sys.argv)
+    confirm = messagebox.askyesno(
+        "Remind Me After - Reset",
+        "This action will also delete your startup timer, do you agree?"
+    )
+    if confirm:
+        if os.path.exists("timer_data.json"):
+            os.remove("timer_data.json")
+        os.execv(sys.executable, ['python'] + sys.argv)
    
 def SaveTimer():
     data = {
         "hours": myTimeInputH.get(),
         "minutes": myTimeInputMin.get(),
         "seconds": myTimeInputSec.get(),
-        "task": taskInput.get(),
-        "currentTime": currentTime
+        "task": taskInput.get()
     }
 
     with open("timer_data.json", "w") as f:
         json.dump(data, f)
-
-    timesUpLabel.config(text="Timer saved! Will be used after shut down")
+    timesUpLabel.config(text="Timer saved! Will be start after shut down or restart app")
  
 def LoadTimer():
     if os.path.exists("timer_data.json"):
@@ -92,14 +98,7 @@ def LoadTimer():
         myTimeInputMin.set(data.get("minutes", "00"))
         myTimeInputSec.set(data.get("seconds", "00"))
         taskInput.insert(0, data.get("task", ""))
-        
-        global currentTime
-        currentTime = data.get("currentTime", 0)
-
-        if currentTime > 0:
-            countdownLabel.config(text=time.strftime('%H:%M:%S', time.gmtime(currentTime)))
-            timesUpLabel.config(text="⏸ Timer paused previously")
-
+        StartTimer()
 
 def EmptyBox(event):
     event.widget.set("")
@@ -150,13 +149,14 @@ countdownLabel.pack()
 timesUpLabel.pack()
 
 buttonFrame = Frame(root)
-buttonFrame.pack()
+buttonFrame2 = Frame(root)
+buttonFrame.pack(pady=5)
 startButton = Button(buttonFrame, text="Start", command=StartTimer, width=10)
 stopButton = Button(buttonFrame, text="Stop", command=StopTimer, width=10)
 resetButton = Button(buttonFrame, text="Reset", command=ResetTimer, width=10)
 saveButton = Button(root, text="Save for startup", command=SaveTimer)
 startButton.grid(row=0, column=0)
-stopButton.grid(row=0, column=1, padx=15, pady=10)
+stopButton.grid(row=0, column=1, padx=15)
 resetButton.grid(row=0, column=2)
 saveButton.pack(pady=15)
 
