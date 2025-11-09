@@ -75,6 +75,13 @@ def EmptyBox(event):
 def FillBox(event):
     if event.widget.get() == "":
         event.widget.set("00")
+    if myTimeInputH.get() == "" or myTimeInputMin.get() == "" or myTimeInputSec.get() == "":
+        myTimeInputH.delete(0, END)
+        myTimeInputMin.delete(0, END)
+        myTimeInputSec.delete(0, END)
+        myTimeInputH.insert(0, "00")
+        myTimeInputMin.insert(0, "00")
+        myTimeInputSec.insert(0, "00")
 
 varMinSec = [f"{i:02d}" for i in range(60)]
 varH = [f"{i:02d}" for i in range(24)]
